@@ -5,6 +5,7 @@ import argparse
 import re
 import time
 import os
+import urllib
 
 
 TEMPLATE = """
@@ -48,9 +49,10 @@ def render_link(ignores, full_path, relative_path):
 <tr>
   <td>{size}</td><td>{date}</td>
   <td>
-    <a href='{relpath}'>{relpath}</a>
+    <a href='{relpath_url}'>{relpath}</a>
   </td>
 </tr>""".format(relpath=relative_path,
+                relpath_url=urllib.quote(relative_path),
                 size=s.st_size, date=time.ctime(s.st_mtime))
 
 
