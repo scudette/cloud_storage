@@ -1,0 +1,25 @@
+#!/bin/bash
+
+DIRNAME=$(basename "$2")
+echo $DIRNAME
+
+if [ ! -d "$2" ]; then
+  echo Must specify a bucket directory.
+  exit $?
+fi
+
+case $1 in
+  pull)
+   echo gsutil -m rsync -r gs://$DIRNAME/ $DIRNAME/
+   gsutil -m rsync -r gs://$DIRNAME/ $DIRNAME/
+   ;;
+  push)
+   echo gsutil -m rsync -r $DIRNAME/ gs://$DIRNAME/
+   python index_maker.py $DIRNAME/
+   gsutil -m rsync -r $DIRNAME/ gs://$DIRNAME/
+   gsutil -m acl ch -r -u AllUsers:R gs://$DIRNAME/
+   ;;
+   *)
+   echo Please select push or pull.
+   ;;
+esac
